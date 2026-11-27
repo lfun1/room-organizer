@@ -1,0 +1,48 @@
+# =============================================================================
+# .gitignore  —  files Git must NEVER save or upload to GitHub
+# =============================================================================
+# Each line is a pattern. Matching files/folders are ignored by `git add`.
+#   folder/      = that folder and everything inside it, anywhere
+#   *.ext        = every file ending in .ext
+#   # ...        = a comment (like this one)
+# =============================================================================
+
+# ---- Personal data ----------------------------------------------------------
+# Copies of the phone's real database and photos (made during testing).
+backups/
+
+# Safety net: never commit a database or its temp files, wherever they are.
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+
+# Safety net: never commit personal photos/screenshots. (The app's own icons
+# are .webp/.xml files in res/, which are NOT matched by these patterns.)
+*.jpg
+*.jpeg
+*.heic
+Progress/
+Screenshot*.png
+
+# ---- Machine-specific settings ----------------------------------------------
+# Contains this computer's Android SDK path (which includes the Windows
+# username). Android Studio recreates it automatically on any computer.
+local.properties
+
+# Android Studio's per-computer project settings and caches.
+.idea/
+*.iml
+
+# ---- Generated build output (recreated by every build) ----------------------
+.gradle/
+.kotlin/
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# ---- Operating system clutter ------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini

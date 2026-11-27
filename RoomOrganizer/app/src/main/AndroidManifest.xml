@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+=============================================================================
+AndroidManifest.xml  —  the app's "ID card" for the phone
+=============================================================================
+Android reads this file BEFORE running any of our code. It says:
+  - what the app is called and what its icon is
+  - which class runs at startup (<application android:name=...>)
+  - which screens exist and which one the home-screen icon opens (<activity>)
+  - which helper components other apps may talk to (<provider>)
+
+PERMISSIONS: v0 needs none.
+  - Picking from the gallery uses Android's built-in Photo Picker, which
+    hands us only the photo the user chose — no storage permission needed.
+  - Taking a photo asks the phone's own Camera app to do it, so WE never
+    use the camera directly — no camera permission needed.
+  (Note: if we ever add <uses-permission android:name="android.permission.CAMERA"/>,
+   Android would then REQUIRE us to ask for it before opening the camera app.)
+=============================================================================
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name=".RoomOrganizerApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.RoomOrganizer">
+        <!--
+          NEW for v0:  android:name=".RoomOrganizerApp"  (first line above)
+          Tells Android to create OUR RoomOrganizerApp class when the app
+          starts, so the shared repository/database is available to every
+          screen. The leading "." is short for the full package name:
+          com.lbunny.roomorganizer.RoomOrganizerApp
+
+          allowBackup="true" (from the template) lets Android's Google backup
+          include the app's data, including the SQLite database.
+        -->
+
+        <!--
+          The one and only screen container. Compose swaps different screens
+          (Home, folder, details) inside it.
+            exported="true"        = the phone's launcher is allowed to open it
+            windowSoftInputMode    = "adjustResize": when the keyboard pops up
+                                     (typing a name), the screen shrinks to fit
+                                     instead of the keyboard covering the form
+            MAIN + LAUNCHER        = "show an icon on the home screen that
+                                     opens this activity"
+        -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.RoomOrganizer"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+          NEW for v0: the FileProvider, used when taking a photo with the camera.
+
+          It lets the separate Camera app write ONE picture into our app's
+          cache/camera/ folder (the allowed folders are listed in
+          res/xml/file_paths.xml).
+
+            authorities = this provider's unique address. It MUST match the
+                          string used in NodeRepository.newCameraPhotoUri():
+                          "${context.packageName}.fileprovider".
+                          ${applicationId} is filled in automatically at build
+                          time with com.lbunny.roomorganizer
+            exported="false"           = no other app can open it on its own
+            grantUriPermissions="true" = we may grant TEMPORARY access to one
+                                         specific file (to the camera app)
+        -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

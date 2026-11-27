@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+=============================================================================
+file_paths.xml  —  which of OUR folders the camera app is allowed to write to
+=============================================================================
+
+When you tap "Take photo", our app asks the phone's CAMERA app (a separate
+app) to save the picture. Normally other apps can't touch our private
+storage at all. A "FileProvider" makes a narrow exception: it hands the
+camera a temporary address (a content:// Uri) for ONE specific file.
+
+This file lists the ONLY folders a FileProvider may hand out addresses for.
+Everything else in the app's storage stays completely private.
+
+  <cache-path>  = a folder inside the app's CACHE storage
+                  (/data/data/com.lbunny.roomorganizer/cache/)
+     name="camera_photos" = the public nickname used in the address
+     path="camera/"       = the real sub-folder: cache/camera/
+
+This matches NodeRepository.newCameraPhotoUri(), which creates the camera's
+file in cache/camera/. After the photo is taken, the repository copies it into
+the permanent files/photos/ folder, so the cache copy is disposable (Android
+may clear the cache when storage is low, which is fine).
+
+The FileProvider itself is switched on in AndroidManifest.xml and points here
+with:  android:resource="@xml/file_paths"
+=============================================================================
+-->
+<paths>
+    <cache-path
+        name="camera_photos"
+        path="camera/" />
+</paths>

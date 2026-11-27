@@ -1,0 +1,108 @@
+# =============================================================================
+# libs.versions.toml  —  the "Version Catalog"
+# =============================================================================
+# This is ONE central list of every library (and Gradle plugin) the app uses,
+# along with which version of each one.
+#
+# How it's used:
+#   - Each entry under [libraries] gets a dotted name you can use in
+#     app/build.gradle.kts. Dashes become dots, e.g.
+#         androidx-room-runtime   ->   libs.androidx.room.runtime
+#   - Each entry under [plugins] works the same way, e.g.
+#         ksp                     ->   libs.plugins.ksp
+#   - "version.ref" points at a name in the [versions] section, so when we
+#     want to upgrade a library we only change ONE number in [versions].
+#
+# Adding a library here does NOT add it to the app by itself — it only gives
+# it a name. app/build.gradle.kts must also list it under `dependencies { }`.
+# =============================================================================
+
+[versions]
+# --- Versions that came with the Android Studio template ---------------------
+agp = "9.5.2"                 # Android Gradle Plugin: the tool that builds the app
+coreKtx = "1.10.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+lifecycleRuntimeKtx = "2.6.1"
+activityCompose = "1.8.0"
+# The Kotlin language version. Updated from the template's 2.2.10 because
+# the newer libraries below (e.g. Lifecycle 2.11) are built with Kotlin 2.4,
+# and an older Kotlin compiler can't read them.
+kotlin = "2.4.10"
+composeBom = "2026.02.01"     # "Bill of Materials": picks matching versions for ALL Compose libraries
+
+# --- NEW for v0 ---------------------------------------------------------------
+# Room = Google's library for using a SQLite database with simple Kotlin code.
+# Instead of writing raw SQL everywhere, we describe tables as Kotlin classes
+# and Room generates the database code for us. Room also handles "migrations"
+# (upgrading the database when v1/v2/... add new fields) so data is never lost.
+room = "2.8.5"
+
+# KSP = "Kotlin Symbol Processing". Room uses it to automatically GENERATE
+# code at build time (e.g. the SQL behind our @Dao functions). You never edit
+# that generated code; KSP rewrites it every build.
+ksp = "2.3.14"
+
+# Navigation Compose = moves between screens (Home -> folder -> sub-folder ->
+# item details) and makes the phone's Back button/gesture go "up" a level.
+navigationCompose = "2.10.2"
+
+# Lifecycle ViewModel Compose = lets each screen have a "ViewModel": an object
+# that holds the screen's data and survives screen rotation. Screens ask the
+# ViewModel for data instead of talking to the database directly.
+lifecycle = "2.11.1"
+
+# Coil = loads and displays photos (from the phone's gallery or camera) in the
+# UI, with automatic resizing and caching so the app stays fast.
+coil = "3.6.3"
+
+# Extended Material icons = the full set of Google icons (folder, box, move,
+# more-options "⋮", etc.). The default set only includes a handful.
+materialIconsExtended = "1.7.8"
+
+[libraries]
+# --- From the template --------------------------------------------------------
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+
+# --- NEW for v0 ---------------------------------------------------------------
+# Room comes in three pieces:
+#   room-runtime  : the database engine code that runs inside the app
+#   room-ktx      : Kotlin extras (lets database calls run in the background
+#                   with "suspend" functions and stream live updates with Flow)
+#   room-compiler : the code GENERATOR that KSP runs at build time
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Screen-to-screen navigation (see [versions] above)
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+# ViewModel support inside Compose screens (see [versions] above)
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+
+# Coil's Compose integration: gives us the AsyncImage() photo component
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+
+# The full Material icon set
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+# NEW for v0: the KSP plugin, so Room can generate its database code
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
