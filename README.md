@@ -1,7 +1,7 @@
 RoomOrganizer app to inventory and track items with a nested folder setup.
 
 To run:
-1. Install Android Studio
+1. Install [Android Studio]([url](https://developer.android.com/studio))
 2. Open room-organizer folder in Android Studio
 3. Connect Android phone with data transfer USB cable
 4. Run app via Android Studio, it should pop up on your phone
