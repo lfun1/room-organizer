@@ -179,10 +179,12 @@ fun DetailsScreen(
                         Icon(Icons.Outlined.Search, contentDescription = "Search")
                     }
                     if (node != null) {
-                        // ＋ box: create inside this folder, or (for an item)
-                        // next to it in the same folder.
-                        val createIn = if (node.type == NodeType.FOLDER) node.id else node.parentId
-                        CreateButton(onCreate = { type -> dialog = NodeDialog.Create(createIn, type) })
+                        // ＋ box: FOLDERS only, creates something inside this
+                        // folder. (Items can't contain anything, so their
+                        // details page has no ＋.)
+                        if (node.type == NodeType.FOLDER) {
+                            CreateButton(onCreate = { type -> dialog = NodeDialog.Create(node.id, type) })
+                        }
                         NodeOverflowMenu(
                             node = node,
                             path = path,
